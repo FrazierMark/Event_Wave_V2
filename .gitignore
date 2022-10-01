@@ -9,7 +9,10 @@
 /coverage
 .glb
 /glb
-#
+
+#build
+.build
+/build
 
 /public
 .public
