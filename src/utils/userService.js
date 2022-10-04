@@ -9,8 +9,6 @@ const options = {
     }
 }
 
-
-
 async function signup(user) {
     // console.log(user, "<----- from userService")
     // Don't need to include headers....
