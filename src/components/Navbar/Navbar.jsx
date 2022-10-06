@@ -13,7 +13,7 @@ function Navbar({ user, handleLogout }) {
         />
       </Link>
       <Link to="/">
-        <h1 className="title" >GeoMap</h1>
+        <h1 className="title">Event Wave</h1>
       </Link>
 
       <div className="nav__nav">
@@ -37,13 +37,16 @@ function Navbar({ user, handleLogout }) {
           </div>
         </Link>
 
-        <Link to="/signup">
-          <div className="nav__option">
-          <span className="nav__optionLineOne"> 
-            </span>
-            <span className="nav__optionLineTwo"> Sign Up</span>
-          </div>
-        </Link>
+        {user ? (
+          ""
+        ) : (
+          <Link to="/signup">
+            <div className="nav__option">
+              <span className="nav__optionLineOne"></span>
+              <span className="nav__optionLineTwo"> Sign Up</span>
+            </div>
+          </Link>
+        )}
       </div>
     </div>
   );

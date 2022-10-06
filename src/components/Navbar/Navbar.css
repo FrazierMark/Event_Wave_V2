@@ -1,12 +1,12 @@
-/* @font-face {
-    font-family: "Baunk";
-    src: url("../../fonts/Baunk.ttf") format("truetype");
-  } */
+@font-face {
+    font-family: "RotundaBold";
+    src: url("../../fonts/EspinosaNovaPro-RotundaBold.otf") format("opentype");
+  }
 
   .nav {
     height: 60px;
     display: flex;
-    background-color: rgb(76, 76, 76);
+    background-color: rgba(255, 255, 255, 0);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -28,8 +28,9 @@
     font-weight: 800;
   }
   .title {
-    font: 70px;
-    color: white
+    font: 80px;
+    color: rgb(0, 0, 0);
+    font-family: RotundaBold;
   }
   
   .nav__optionLineTwo {

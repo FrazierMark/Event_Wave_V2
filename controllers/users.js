@@ -9,10 +9,6 @@ module.exports = {
 };
 
 async function signup(req, res) {
-
-
-  console.log(req.body, "<--- from from controllers");
-
   const user = new User(req.body);
   try {
     await user.save();
@@ -26,13 +22,12 @@ async function signup(req, res) {
 
 
 async function login(req, res) {
-  console.log(req.body, "<---- From controllers....")
   try {
     const user = await User.findOne({ email: req.body.email });
     console.log(user)
     console.log(user, " this user in login");
     if (!user) return res.status(401).json({ err: "bad credentials" });
-    // had to update the password from req.body.pw, to req.body password
+    
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (isMatch) {
         const token = createJWT(user);
@@ -47,7 +42,6 @@ async function login(req, res) {
 }
 
 /*----- Helper Functions -----*/
-
 function createJWT(user) {
   return jwt.sign(
     { user }, // data payload

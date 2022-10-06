@@ -12,9 +12,6 @@ const options = {
 
 
 async function signup(user) {
-    console.log(user, "<----- from userService")
-    // Don't need to include headers....
-
     return await axios.post(BASE_URL + "signup", user)
         .then((res) => {
             if (res.status === 200)

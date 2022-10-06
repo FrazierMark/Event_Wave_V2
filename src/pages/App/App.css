@@ -34,4 +34,6 @@ canvas {
   left: 0;
   outline: none;
   z-index: -1;
+  background: linear-gradient(205deg, #bec5ff, #ffffff);
+  /* background: rgb(188, 183, 183); */
 }
