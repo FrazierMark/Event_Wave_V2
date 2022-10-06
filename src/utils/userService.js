@@ -17,20 +17,16 @@ async function signup(user) {
 
     return await axios.post(BASE_URL + "signup", user)
         .then((res) => {
-            console.log(res)
-            if (res.status === 200) return res.data.token; 
-            throw new Error("Email already taken!");
-
+            if (res.status === 200)
+                tokenService.setToken(res.data.token)
+            else {
+                throw new Error("Email already taken!")
+            };
         })
-        //.then(console.log(res.data.token, "<------ this be token"))
-        .then(console.log(token, "<------ this be token"))
-
-        .then(({ token }) => tokenService.setToken(token))
         .catch((err) => {
             console.log("ERROR: === ", err)
         })
 }
-
 
 function getUser() {
     return tokenService.getUserFromToken();
