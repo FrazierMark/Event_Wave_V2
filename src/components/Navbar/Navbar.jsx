@@ -5,13 +5,13 @@ import "./Navbar.css";
 function Navbar({ user, handleLogout }) {
   return (
     <div className="nav">
-      <Link to="/">
+      {/* <Link to="/">
         <img
           className="nav__logo"
           src="https://i.imgur.com/ic7njgq.png"
           alt="landscape terrain logo"
         />
-      </Link>
+      </Link> */}
       <Link to="/">
         <h1 className="title">Event Wave</h1>
       </Link>
@@ -22,17 +22,17 @@ function Navbar({ user, handleLogout }) {
         ) : (
           <Link to="/locations">
             <div className="nav__option">
-              <span className="nav__optionLineTwo"> My Locations</span>
+              <span className="nav__optionLineTwo"> MyEvents</span>
             </div>
           </Link>
         )}
         <Link to={!user && "/login"}>
           <div onClick={handleLogout} className="nav__optionOne">
             <span className="nav__optionLineThree">
-              {!user ? "Guest" : user.email}
+              {!user ? "Guest" : user.username}
             </span>
             <span className="nav__optionLineTwo">
-              {user ? "Sign Out" : "Sign In"}
+              {user ? "SignOut" : "SignIn"}
             </span>
           </div>
         </Link>
