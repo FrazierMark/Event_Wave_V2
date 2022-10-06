@@ -1,5 +1,6 @@
 import tokenService from "./tokenService";
 import axios from "axios";
+import { token } from "morgan";
 
 const BASE_URL = "/api/users/";
 const AXIOS_BASE_URL = "api/users/";
@@ -9,17 +10,21 @@ const options = {
     }
 }
 
+
 async function signup(user) {
-    // console.log(user, "<----- from userService")
+    console.log(user, "<----- from userService")
     // Don't need to include headers....
 
     return await axios.post(BASE_URL + "signup", user)
         .then((res) => {
-            if (res.ok) return res.json();
-            // Probably a duplicate email
+            console.log(res)
+            if (res.status === 200) return res.data.token; 
             throw new Error("Email already taken!");
+
         })
-        // Parameter destructuring!
+        //.then(console.log(res.data.token, "<------ this be token"))
+        .then(console.log(token, "<------ this be token"))
+
         .then(({ token }) => tokenService.setToken(token))
         .catch((err) => {
             console.log("ERROR: === ", err)

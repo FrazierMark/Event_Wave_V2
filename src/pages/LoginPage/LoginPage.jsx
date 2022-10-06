@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./LoginPage.css";
 import userService from "../../utils/userService";
 import { useNavigate, Link } from "react-router-dom";
-// import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 
 export default function LoginPage(props) {
   const [error, setError] = useState("");
@@ -36,7 +36,7 @@ export default function LoginPage(props) {
 
   return (
     <>
-      {/* <Navbar user={props.user} /> */}
+      <Navbar user={props.user} />
       <div className="login-wrapper">
         <form autoComplete="off" className="form" onSubmit={handleSubmit}>
           <img src="https://i.imgur.com/ic7njgq.png" alt="" />

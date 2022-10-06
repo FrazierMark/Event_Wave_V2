@@ -9,34 +9,21 @@ module.exports = {
 };
 
 async function signup(req, res) {
+
+
   console.log(req.body, "<--- from from controllers");
 
-  //////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////////
-
-  // FilePath unique name to be saved to our butckt
-  // const filePath = `${uuidv4()}/${req.file.originalname}`;
-  // const params = {
-  //   Bucket: process.env.BUCKET_NAME,
-  //   Key: filePath,
-  //   Body: req.file.buffer,
-  // };
-  //////////////////////////////////////////////////////////////////////////////////
-  //s3.upload(params, async function (err, data) {
-  //  console.log(data, "from aws"); // data.Location is our photoUrl that exists on aws
   const user = new User(req.body);
   try {
     await user.save();
     const token = createJWT(user); // user is the payload so this is the object in our jwt
-    res.json({ token });
+    return res.json({ token });
   } catch (err) {
     // Probably a duplicate email
     res.status(400).json(err);
   }
 };
-//////////////////////////////////////////////////////////////////////////////////
-//}
+
 
 async function login(req, res) {
   console.log(req.body, "<---- From controllers....")

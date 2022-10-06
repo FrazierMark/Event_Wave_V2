@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import userService from "../../utils/userService";
 import "./SignupPage.css";
 import { useNavigate } from "react-router-dom";
-//import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 
 export default function SignUpPage(props) {
   const navigate = useNavigate();
-
   const [error, setError] = useState("");
   const [state, setState] = useState({
     username: "",
@@ -15,21 +14,11 @@ export default function SignUpPage(props) {
     passwordConf: "",
   });
 
-  const [selectedFile, setSelectedFile] = useState("");
-
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // const formData = new FormData(); // new FormData is from the browser
-    // formData.append("photo", selectedFile);
-
-    // for (let fieldName in state) {
-    //   formData.append(fieldName, state[fieldName]);
-    // }
-
     try {
-      await userService.signup(state); // <- we must pass the argument as formData when we have a
-      // photo
+      await userService.signup(state);
       props.handleSignUpOrLogin(); // <- this will decode the token from local storage
 
       navigate("/");
@@ -46,14 +35,9 @@ export default function SignUpPage(props) {
     });
   }
 
-  function handleFileInput(e) {
-    console.log(e.target.files);
-    setSelectedFile(e.target.files[0]);
-  }
-
   return (
     <>
-      {/* <Navbar user={props.user} /> */}
+      <Navbar user={props.user} />
       <div className="login-wrapper">
         <form autoComplete="off" className="form" onSubmit={handleSubmit}>
           <img src="https://i.imgur.com/ic7njgq.png" alt="" />
@@ -97,17 +81,8 @@ export default function SignUpPage(props) {
               required
             />
           </div>
-          {/* <form> */}
-          {/* <div className="input-group">
-              <input
-                type="file"
-                name="photo"
-                placeholder="upload image"
-                onChange={handleFileInput}
-              />
-            </div> */}
+
           <input type="submit" value="Sign Up" className="submit-btn"></input>
-          {/* </form> */}
         </form>
       </div>
     </>

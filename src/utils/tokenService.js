@@ -1,6 +1,7 @@
 function setToken(token) {
     if (token) {
         // localStorage is given to us by the browser
+        console.log("THIS IS GETTING CALLED AT SETTOKEN")
         localStorage.setItem("token", token);
     } else {
         localStorage.removeItem("token");

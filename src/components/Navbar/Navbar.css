@@ -1,0 +1,138 @@
+/* @font-face {
+    font-family: "Baunk";
+    src: url("../../fonts/Baunk.ttf") format("truetype");
+  } */
+
+  .nav {
+    height: 60px;
+    display: flex;
+    background-color: rgb(76, 76, 76);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    scroll-behavior: smooth;
+    justify-content:space-evenly;
+    
+  }
+  
+  .nav__logo {
+    top: 0px;
+    width: 90px;
+    height: 80%;
+    align-items: top;
+  }
+  
+  .nav__optionLineOne {
+    font-size: 17px;
+    font-weight: 800;
+  }
+  .title {
+    font: 70px;
+    color: white
+  }
+  
+  .nav__optionLineTwo {
+    font-size: 20px;
+    font-weight: 800;
+    justify-content: space-between;
+    padding: 0.4em .4em;
+    border: 1px solid #ff69d0;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: transparent;
+    font-weight: 400;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.15s;
+    align-items: center;
+  }
+  
+  .nav__optionLineThree {
+    font-size: 18px;
+    font-weight: 800;
+    justify-content: space-between;
+    padding: 0.4em .4em;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: transparent;
+    font-weight: 400;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.15s;
+    align-items: center;
+    text-decoration: none;
+    
+  }
+  
+  
+  .nav__nav {
+    display: flex;
+    height: 90%;
+    align-items: center;
+    text-align: right;
+  
+    justify-content: space-between;
+  }
+  
+  .nav__option {
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: 30px;
+    color: white;
+  }
+  
+  
+  .link_button {
+    justify-content: space-between;
+    padding: 0.4em .4em;
+    border: 0.1em solid #ffffff;
+    margin: 0.4em;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 1.3em;
+    color: #ffffff;
+    text-align: center;
+    transition: all 0.15s;
+    align-items: center;
+  }
+  
+  
+    a {
+      color: black;
+    }
+    a:link {
+      text-decoration: none;
+  }
+  
+    a.button {
+      display: inline-block;
+      padding: 0.7em 1em;
+      border: 0.1em solid #ffffff;
+      margin: 0 0.1em 0.1em 0;
+      box-sizing: border-box;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 400;
+      color: #ffffff;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    
+    a.button:hover {
+      color: #dddddd;
+      border-color: #dddddd;
+    }
+    
+    a.button:active {
+      color: #bbbbbb;
+      border-color: #bbbbbb;
+    }
+  
+   
