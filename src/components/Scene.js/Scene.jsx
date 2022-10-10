@@ -12,7 +12,7 @@ const Scene = () => {
       <Canvas className="canvas" camera={{ position: [0, 100, 195] }}>
         <Light />
         <OrbitControls dampingFactor={0.5} enableDamping="true" />
-        <Stars
+        {/* <Stars
           radius={100}
           depth={50}
           count={5000}
@@ -20,7 +20,7 @@ const Scene = () => {
           saturation={0}
           fade
           speed={1}
-        />
+        /> */}
         <Suspense>
           <Effects />
           <TvModel />

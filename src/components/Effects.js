@@ -20,9 +20,9 @@ function Effects() {
       <EffectComposer>
         {glitch && (
           <Glitch
-            delay={[args[0] * 1.5, args[0] * 3.5]}
-            duration={[args[1] * 0.6, args[1]]}
-            strength={[args[2] * 0.3, args[2]]}
+            delay={[args[0] * 0.5, args[0] * 1.5]}
+            duration={[args[1] * 3.6, args[1]]}
+            strength={[args[2] * 0.05, args[2]]}
           />
         )}
         {bloom && (
@@ -33,11 +33,9 @@ function Effects() {
           />
         )}
         {noise && <Noise />}
-
         {chromaticAberration && (
           <ChromaticAberration offset={[0.02 * args[0], 0.002 * args[1]]} />
         )}
-        
       </EffectComposer>
     );
   }
