@@ -15,7 +15,7 @@ function Light() {
 
   return (
     <>
-      <ambientLight color="white" intensity={0.4} />
+      <ambientLight color="white" intensity={1.4} />
       <spotLight
         ref={mainLightRef}
         castShadow={true}
