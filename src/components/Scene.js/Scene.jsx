@@ -60,8 +60,7 @@ const Scene = ({ setBg }) => {
     }
   });
 
-  // Springs for color and overall looks, this is state-driven animation
-  // React-spring is physics based and turns static props into animated values
+
   const [{ wobble, coat, color, ambient, env }] = useSpring(
     {
       wobble: down ? 1.2 : hovered ? 1.05 : 1,
@@ -70,16 +69,15 @@ const Scene = ({ setBg }) => {
       env: mode && !hovered ? 0.4 : 1,
       color: hovered ? "#E8B059" : mode ? "#202020" : "white",
       config: (n) =>
-        n === "wobble" && hovered && { mass: 2, tension: 10, friction: 2 },
+        n === "wobble" && hovered && { mass: 2, tension: 10, friction: 0.2 },
     },
     [mode, hovered, down]
   );
 
   return (
     <>
-      
-        <Light />
-        <OrbitControls dampingFactor={0.5} enableDamping="true" /> */}
+      <Light />
+      <OrbitControls dampingFactor={0.5} enableDamping="true" />
       <Stars
         radius={100}
         depth={50}
@@ -89,9 +87,6 @@ const Scene = ({ setBg }) => {
         fade
         speed={1}
       />
-      {/* <Suspense>
-          
-        </Suspense> */}
 
       <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={75}>
         <a.ambientLight intensity={ambient} />
@@ -103,8 +98,9 @@ const Scene = ({ setBg }) => {
         />
       </PerspectiveCamera>
       <Suspense fallback={null}>
-      <Effects />
-          <TvModel />
+        <Effects />
+        <TvModel />
+
         <a.mesh
           ref={sphere}
           scale={wobble}
@@ -130,7 +126,8 @@ const Scene = ({ setBg }) => {
             metalness={0.1}
           />
         </a.mesh>
-        <Environment preset="warehouse" />
+
+        <Environment preset="lobby" />
         <ContactShadows
           rotation={[Math.PI / 2, 0, 0]}
           position={[0, -1.6, 0]}
