@@ -31,7 +31,7 @@ main {
   }
 }
 
-canvas {
+/* canvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -39,4 +39,10 @@ canvas {
   z-index: -1;
   /* background: linear-gradient(205deg, #272729, #662500); */
   /* background: rgb(188, 183, 183); */
+
+
+.canvas {
+  order: 2;
+  flex: 1;
+  height: 100%;
 }

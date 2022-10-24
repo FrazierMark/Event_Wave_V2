@@ -1,17 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js";
-import {
-    MeshDistortMaterial,
-    useFBO,
-} from "@react-three/drei";
+import { useFBO } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useSpring } from "@react-spring/core";
 import { a } from "@react-spring/three";
+import { useControls } from "leva";
 
 const Bubble = ({ setBg }) => {
-    const sphere = useRef();
 
+    const { dark, color, environment, ...config } = useControls({
+        uRefractPower: { value: 0.1, min: 0, max: 1 },
+        uTransparent: { value: 0.5, min: 0, max: 1 },
+        uNoise: { value: 0.03, min: 0, max: 1, step: 0.01 },
+        uHue: { value: 0.0, min: 0, max: Math.PI * 2, step: 0.01 },
+        uSat: { value: 1.0, min: 1, max: 1.25, step: 0.01 },
+        color: 'hotpink',
+        uTime: 0,
+    })
+
+    const sphere = useRef();
     const fbo = useFBO(1024)
     const [mode, setMode] = useState(false);
     const [down, setDown] = useState(false);
@@ -28,7 +36,7 @@ const Bubble = ({ setBg }) => {
 
     // Make the bubble float and follow the mouse
     // This is frame-based animation, useFrame subscribes the component to the render-loop
-    useFrame((state) => {
+    useFrame((state, clock) => {
 
         sphere.current.visible = false
         state.gl.setRenderTarget(fbo)
@@ -52,13 +60,12 @@ const Bubble = ({ setBg }) => {
         }
     });
 
-    const [{ wobble, coat, color, ambient, env }] = useSpring(
+    const [{ wobble, coat, ambient, env }] = useSpring(
         {
             wobble: down ? 1.2 : hovered ? 1.05 : 1,
             coat: mode && !hovered ? 0.04 : 1,
             ambient: mode && !hovered ? 1.5 : 0.5,
             env: mode && !hovered ? 0.4 : 1,
-            color: hovered ? "#E8B059" : mode ? "#202020" : "white",
             config: (n) =>
                 n === "wobble" && hovered && { mass: 2, tension: 10, friction: 0.2 },
         },
@@ -98,6 +105,7 @@ const Bubble = ({ setBg }) => {
                     uTransparent={0.35}
                     uSat={1.03}
                     uIntensity={2}
+                    {...config}
                 />
             </a.mesh>
 
