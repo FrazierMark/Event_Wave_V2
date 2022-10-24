@@ -1,11 +1,11 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
+import { MeshReflectionMaterial } from "../../shaders/MeshRefractionMaterial.js";
 import {
   OrbitControls,
   Sky,
   Stars,
   Sparkles,
-  Stage,
   Environment,
   PerspectiveCamera,
   MeshDistortMaterial,
