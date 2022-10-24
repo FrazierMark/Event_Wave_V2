@@ -20,7 +20,9 @@ const MeshRefractionMaterialImpl = shaderMaterial(
     uIntensity: 1.0,
     winResolution: new THREE.Vector2()
     },
-    glsl`varying vec2 vUv;
+  glsl`
+  precision mediump float;  
+  varying vec2 vUv;
   varying vec3 vNormal;
   varying vec3 vViewPos;
   varying vec3 vWorldPos;

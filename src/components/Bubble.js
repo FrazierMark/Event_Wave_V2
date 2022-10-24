@@ -36,8 +36,9 @@ const Bubble = ({ setBg }) => {
 
     // Make the bubble float and follow the mouse
     // This is frame-based animation, useFrame subscribes the component to the render-loop
-    useFrame((state, clock) => {
+    useFrame((state) => {
 
+        const time = state.clock.getElapsedTime();
         sphere.current.visible = false
         state.gl.setRenderTarget(fbo)
         state.gl.render(state.scene, state.camera)
