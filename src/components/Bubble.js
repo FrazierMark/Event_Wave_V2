@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js";
-import { useFBO } from "@react-three/drei";
+import { useFBO, useDetectGPU } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useSpring } from "@react-spring/core";
@@ -15,15 +15,36 @@ const Bubble = ({ setBg }) => {
         uNoise: { value: 0.03, min: 0, max: 1, step: 0.01 },
         uHue: { value: 0.0, min: 0, max: Math.PI * 2, step: 0.01 },
         uSat: { value: 1.0, min: 1, max: 1.25, step: 0.01 },
+        uFrequency: { value: 0.2 },
+        uAmplitude: { value: 0.4 },
+        uResolution: [1, 1],
         color: 'hotpink',
-        uTime: 0,
     })
 
     const sphere = useRef();
     const fbo = useFBO(1024)
+    const GPU = useDetectGPU();
     const [mode, setMode] = useState(false);
     const [down, setDown] = useState(false);
     const [hovered, setHovered] = useState(false);
+
+    //Calculate GPU / resolution
+    const resolution = useMemo(() => {
+        switch (GPU.tier) {
+            case 3: {
+                return GPU.isMobile ? 300 : 450;
+            }
+            case 2: {
+                return GPU.isMobile ? 200 : 300;
+            }
+            case 1: {
+                return GPU.isMobile ? 150 : 256;
+            }
+            default: {
+                return GPU.isMobile ? 100 : 128;
+            }
+        }
+    }, [GPU]);
 
     // Change cursor on hovered state
     useEffect(() => {
@@ -38,7 +59,7 @@ const Bubble = ({ setBg }) => {
     // This is frame-based animation, useFrame subscribes the component to the render-loop
     useFrame((state) => {
 
-        const time = state.clock.getElapsedTime();
+        sphere.current.uTime = state.clock.getElapsedTime();
         sphere.current.visible = false
         state.gl.setRenderTarget(fbo)
         state.gl.render(state.scene, state.camera)
@@ -61,12 +82,9 @@ const Bubble = ({ setBg }) => {
         }
     });
 
-    const [{ wobble, coat, ambient, env }] = useSpring(
+    const [{ wobble }] = useSpring(
         {
             wobble: down ? 1.2 : hovered ? 1.05 : 1,
-            coat: mode && !hovered ? 0.04 : 1,
-            ambient: mode && !hovered ? 1.5 : 0.5,
-            env: mode && !hovered ? 0.4 : 1,
             config: (n) =>
                 n === "wobble" && hovered && { mass: 2, tension: 10, friction: 0.2 },
         },
@@ -106,6 +124,7 @@ const Bubble = ({ setBg }) => {
                     uTransparent={0.35}
                     uSat={1.03}
                     uIntensity={2}
+                    uResolution={[resolution, resolution]}
                     {...config}
                 />
             </a.mesh>

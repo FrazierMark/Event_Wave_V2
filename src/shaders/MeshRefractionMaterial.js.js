@@ -4,12 +4,14 @@ import { extend, useThree } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
 
 
-// from pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
+// Inspired from pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
+// Inspired from John Beresford - https://www.lab.john-beresford.com/experiments/chaossphere 
+
 const MeshRefractionMaterialImpl = shaderMaterial(
   {
     uTime: 0,
-    uDistort: 0.4,
-    uRadius: 1,
+    uAmplitude: 0.5,
+    uFrequency: 1.0,
     uRefractPower: 0.3,
     uRefractNormal: 0.85,
     uSceneTex: null,
@@ -21,16 +23,63 @@ const MeshRefractionMaterialImpl = shaderMaterial(
     winResolution: new THREE.Vector2()
     },
   glsl`
-  precision mediump float;  
+  precision mediump float;
+  
+  #define PI 3.1415926535897932384626433832795;
+  #define FBM_INIT_AMP 0.5;
+  #define FBM_INIT_FREQ 1.0;
+  #define FBM_GAIN 0.675;
+  #define FBM_LACUNARITY 4.0;
+
+  #pragma glslify: cnoise = require(glsl-noise/classic/4d)
+
+
+  float fbm(vec4 p) {
+    float f = 0.0;
+  
+    float a = FBM_INIT_AMP;
+    float fq = FBM_INIT_FREQ;
+    for(int i = 0; i < 4; i++) {
+      f += a * cnoise(p * fq);
+      a *= FBM_GAIN;
+      fq *= FBM_LACUNARITY;
+    }
+    return f;
+  }
+  
+  float domainDistort(vec4 p) {
+    float f = cnoise(-p.xwzy * 3.0);
+  
+    return fbm(p + f);
+  }
+
+
   varying vec2 vUv;
   varying vec3 vNormal;
   varying vec3 vViewPos;
   varying vec3 vWorldPos;
+  uniform float uTime;
+  uniform float uFrequency;
+  uniform float uAmplitude;
+  uniform vec2 uResolution;
+
+  #pragma glslify: snoise3 = require(glsl-noise/simplex/3d.glsl);
   
   void main() {
     vec3 pos = position;
+
+    float displacement = domainDistort(vec4(pos * uFrequency, uTime)) * uAmplitude;
+
+    pos += displacement * position;
+
+
     vec4 worldPos = modelMatrix * vec4( pos, 1.0 );
+
+    // worldPos.y += sin(worldPos.x * uFrequency.x + uTime) * uAmplitude.x;
+    // worldPos.x += cos(worldPos.y * uFrequency.y + uTime) * uAmplitude.y;
+
     vec4 mvPosition = viewMatrix * worldPos;
+
     gl_Position = projectionMatrix * mvPosition;
     vec3 transformedNormal = normalMatrix * normal;
     vec3 normal = normalize( transformedNormal );
@@ -48,8 +97,6 @@ const MeshRefractionMaterialImpl = shaderMaterial(
   uniform float uIntensity;
   uniform float uHue;
   uniform float uTime;
-  uniform float uRadius;
-  uniform float uDistort;
   
   // uniform samplerCube uEnvMap;
   uniform sampler2D uSceneTex;
