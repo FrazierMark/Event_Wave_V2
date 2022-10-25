@@ -109,7 +109,7 @@ const Bubble = ({ setBg }) => {
                     });
                 }}
             >
-                <sphereBufferGeometry args={[1, 64, 64]} />
+                <icosahedronBufferGeometry args={[1, 64, 64]} />
                 {/* <AnimatedMaterial
                     color={color}
                     envMapIntensity={env}

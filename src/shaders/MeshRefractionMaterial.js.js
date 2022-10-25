@@ -1,7 +1,11 @@
+
 import glsl from 'babel-plugin-glsl/macro'
 import * as THREE from 'three'
 import { extend, useThree } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
+import * as cnoise31 from './noise.glsl'
+import * as recalcNormal from './recalcNormal.glsl'
+
 
 
 // Inspired from pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
@@ -21,8 +25,10 @@ const MeshRefractionMaterialImpl = shaderMaterial(
     uHue: 0.0,
     uIntensity: 1.0,
     winResolution: new THREE.Vector2()
-    },
+  },
+
   glsl`
+
   precision mediump float;
   
   #define PI 3.1415926535897932384626433832795;
@@ -41,6 +47,32 @@ const MeshRefractionMaterialImpl = shaderMaterial(
   uniform float uFrequency;
   uniform float uAmplitude;
   uniform vec2 uResolution;
+
+
+
+
+vec3 orthogonal(vec3 v) {
+  return normalize(abs(v.x) > abs(v.z) ? vec3(-v.y, v.x, 0.0) : vec3(0.0, -v.z, v.y));
+}
+
+vec3 recalcNormal(vec3 newPos) {
+  float offset = 0.001;
+  vec3 tangent = orthogonal(normal);
+  vec3 bitangent = normalize(cross(normal, tangent));
+  vec3 neighbour1 = pos + tangent * offset;
+  vec3 neighbour2 = pos + bitangent * offset;
+
+  vec3 displacedNeighbour1 = displace(neighbour1);
+  vec3 displacedNeighbour2 = displace(neighbour2);
+
+  vec3 displacedTangent = displacedNeighbour1 - newPos;
+  vec3 displacedBitangent = displacedNeighbour2 - newPos;
+
+  return normalize(cross(displacedTangent, displacedBitangent));
+}
+
+
+  
 
 
   void main() {
