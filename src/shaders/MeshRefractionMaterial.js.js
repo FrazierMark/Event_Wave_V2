@@ -58,7 +58,7 @@ const MeshRefractionMaterialImpl = shaderMaterial(
 vec3 displace(vec3 v) {
   vec3 result = v;
   float n = noise(result * 1.0 + uTime * 0.3);
-  result += normal * n * 0.55;
+  result += normal * n * 0.15;
   return result;
 }
 
@@ -86,14 +86,13 @@ vec3 recalcNormal(vec3 newPos) {
   void main() {
 
     vec3 pos = displace(position);
-    //gl_Position = projectionMatrix * modelViewMatrix * vec4( pos, 1.0 );
     vec3 correctedNormal = recalcNormal(pos);
     v_normal = normalize(normalMatrix * correctedNormal);
     v_eye = normalize(modelViewMatrix * vec4( pos, 1.0 )).xyz;
 
-    float noiseFreq = 2.0;
-    float noiseAmp = 0.4;
-    vec3 noisePos = vec3(pos.x * noiseFreq + uTime, pos.y+noiseFreq, pos.z);
+    // float noiseFreq = 2.0;
+    // float noiseAmp = 0.4;
+    // vec3 noisePos = vec3(pos.x + uTime, pos.y, pos.z);
   
     vec4 worldPos = modelMatrix * vec4( pos, 1.0 );
     vec4 mvPosition = viewMatrix * worldPos;
