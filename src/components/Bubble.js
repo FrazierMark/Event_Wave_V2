@@ -19,6 +19,7 @@ const Bubble = ({ setBg }) => {
         uAmplitude: { value: 0.4 },
         uResolution: [1, 1],
         color: 'hotpink',
+        uTime: { value: 0 }
     })
 
     const sphere = useRef();
@@ -109,14 +110,7 @@ const Bubble = ({ setBg }) => {
                     });
                 }}
             >
-                <icosahedronBufferGeometry args={[1, 64, 64]} />
-                {/* <AnimatedMaterial
-                    color={color}
-                    envMapIntensity={env}
-                    clearcoat={coat}
-                    clearcoatRoughness={0}
-                    metalness={0.1}
-                /> */}
+                <sphereBufferGeometry args={[4, 164, 164]} />
                 <MeshRefractionMaterial
                     uSceneTex={fbo.texture}
                     uRefractPower={1.0}
@@ -125,6 +119,7 @@ const Bubble = ({ setBg }) => {
                     uSat={1.03}
                     uIntensity={2}
                     uResolution={[resolution, resolution]}
+                    uTime={0.0}
                     {...config}
                 />
             </a.mesh>

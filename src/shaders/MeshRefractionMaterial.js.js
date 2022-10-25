@@ -3,9 +3,6 @@ import glsl from 'babel-plugin-glsl/macro'
 import * as THREE from 'three'
 import { extend, useThree } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
-import * as cnoise31 from './noise.glsl'
-import * as recalcNormal from './recalcNormal.glsl'
-
 
 
 // Inspired from pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
@@ -13,7 +10,7 @@ import * as recalcNormal from './recalcNormal.glsl'
 
 const MeshRefractionMaterialImpl = shaderMaterial(
   {
-    uTime: 0,
+    uTime: 0.0,
     uAmplitude: 0.5,
     uFrequency: 1.0,
     uRefractPower: 0.3,
@@ -41,15 +38,29 @@ const MeshRefractionMaterialImpl = shaderMaterial(
   varying vec3 vNormal;
   varying vec3 vViewPos;
   varying vec3 vWorldPos;
+  varying float vWave;
   varying vec3 v_normal;
   varying vec3 v_eye;
+
   uniform float uTime;
   uniform float uFrequency;
   uniform float uAmplitude;
   uniform vec2 uResolution;
 
 
+  vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
+  vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
+  vec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
 
+  #pragma glslify: noise = require(glsl-noise/classic/3d.glsl) 
+
+
+vec3 displace(vec3 v) {
+  vec3 result = v;
+  float n = noise(result * 1.0 + uTime * 0.3);
+  result += normal * n * 0.55;
+  return result;
+}
 
 vec3 orthogonal(vec3 v) {
   return normalize(abs(v.x) > abs(v.z) ? vec3(-v.y, v.x, 0.0) : vec3(0.0, -v.z, v.y));
@@ -59,8 +70,8 @@ vec3 recalcNormal(vec3 newPos) {
   float offset = 0.001;
   vec3 tangent = orthogonal(normal);
   vec3 bitangent = normalize(cross(normal, tangent));
-  vec3 neighbour1 = pos + tangent * offset;
-  vec3 neighbour2 = pos + bitangent * offset;
+  vec3 neighbour1 = position + tangent * offset;
+  vec3 neighbour2 = position + bitangent * offset;
 
   vec3 displacedNeighbour1 = displace(neighbour1);
   vec3 displacedNeighbour2 = displace(neighbour2);
@@ -72,24 +83,37 @@ vec3 recalcNormal(vec3 newPos) {
 }
 
 
+  void main() {
+
+    vec3 pos = displace(position);
+    //gl_Position = projectionMatrix * modelViewMatrix * vec4( pos, 1.0 );
+    vec3 correctedNormal = recalcNormal(pos);
+    v_normal = normalize(normalMatrix * correctedNormal);
+    v_eye = normalize(modelViewMatrix * vec4( pos, 1.0 )).xyz;
+
+    float noiseFreq = 2.0;
+    float noiseAmp = 0.4;
+    vec3 noisePos = vec3(pos.x * noiseFreq + uTime, pos.y, pos.z);
   
 
 
-  void main() {
-
-    vec3 pos = position;
 
     vec4 worldPos = modelMatrix * vec4( pos, 1.0 );
-
     vec4 mvPosition = viewMatrix * worldPos;
-
     gl_Position = projectionMatrix * mvPosition;
+
+
     vec3 transformedNormal = normalMatrix * normal;
     vec3 normal = normalize( transformedNormal );
     vUv = uv;
     vNormal = normal;
     vViewPos = -mvPosition.xyz;
     vWorldPos = worldPos.xyz;
+
+
+  
+
+
   }`,
     glsl`uniform float uTransparent;
   uniform vec2 winResolution;
@@ -108,6 +132,9 @@ vec3 recalcNormal(vec3 newPos) {
   varying vec3 vNormal;
   varying vec3 vViewPos;
   varying vec3 vWorldPos;
+  varying float vWave;
+  varying vec3 v_normal;
+  varying vec3 v_eye;
   
   float random(vec2 p) {
     return fract(sin(dot(p.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -144,7 +171,6 @@ vec3 recalcNormal(vec3 newPos) {
     vec3    yIQ   = vec3 (YPrime, I, Q);
 
     return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );
-
 }
 
   struct Geometry {
@@ -157,8 +183,10 @@ vec3 recalcNormal(vec3 newPos) {
   };
 
   void main() {
+    
+
     vec2 uv = gl_FragCoord.xy / winResolution.xy;
-    vec2 refractNormal = vNormal.xy * (1.0 - vNormal.z * uRefractNormal);
+    vec2 refractNormal = v_normal.xy * (1.0 - v_normal.z * uRefractNormal);
     vec3 refractCol = vec3( 0.0 );
 
     float slide;
@@ -179,7 +207,6 @@ vec3 recalcNormal(vec3 newPos) {
     #pragma unroll_loop_end
 
     refractCol /= float( 8 );
-    //gl_FragColor = vec4(refractCol * uIntensity, 1.0);
     gl_FragColor = vec4(hue(refractCol * uIntensity, uHue), 1.0);
     #include <tonemapping_fragment>
     #include <encodings_fragment>
