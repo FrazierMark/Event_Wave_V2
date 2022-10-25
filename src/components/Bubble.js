@@ -18,7 +18,6 @@ const Bubble = ({ setBg }) => {
         uFrequency: { value: 0.2 },
         uAmplitude: { value: 0.4 },
         uResolution: [1, 1],
-        color: 'hotpink',
         uTime: { value: 0 }
     })
 
@@ -60,7 +59,9 @@ const Bubble = ({ setBg }) => {
     // This is frame-based animation, useFrame subscribes the component to the render-loop
     useFrame((state) => {
 
-        sphere.current.uTime = state.clock.getElapsedTime();
+        const { clock } = state;
+        sphere.current.material.uniforms.uTime.value = clock.getElapsedTime();
+
         sphere.current.visible = false
         state.gl.setRenderTarget(fbo)
         state.gl.render(state.scene, state.camera)
@@ -68,6 +69,7 @@ const Bubble = ({ setBg }) => {
         state.gl.setRenderTarget(null)
         sphere.current.visible = true
 
+        // Make sphere hover slightly up and down
         if (sphere.current) {
             sphere.current.position.x = THREE.MathUtils.lerp(
                 sphere.current.position.x,
@@ -96,7 +98,7 @@ const Bubble = ({ setBg }) => {
         <>
             <a.mesh
                 ref={sphere}
-                scale={wobble}
+                // scale={wobble}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
                 onPointerDown={() => setDown(true)}
@@ -119,8 +121,9 @@ const Bubble = ({ setBg }) => {
                     uSat={1.03}
                     uIntensity={2}
                     uResolution={[resolution, resolution]}
-                    uTime={0.0}
+                    uTime={10.0}
                     {...config}
+                    // wireframe={true}
                 />
             </a.mesh>
 

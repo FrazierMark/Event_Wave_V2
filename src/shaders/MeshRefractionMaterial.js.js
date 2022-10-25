@@ -6,7 +6,8 @@ import { shaderMaterial } from '@react-three/drei'
 
 
 // Inspired from pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
-// Inspired from John Beresford - https://www.lab.john-beresford.com/experiments/chaossphere 
+// Inspired from John Beresford - https://www.lab.john-beresford.com/experiments/chaossphere
+// Inspired from nemutas -  ha-labo-effect - https://github.com/nemutas/ha-labo-effect
 
 const MeshRefractionMaterialImpl = shaderMaterial(
   {
@@ -25,7 +26,6 @@ const MeshRefractionMaterialImpl = shaderMaterial(
   },
 
   glsl`
-
   precision mediump float;
   
   #define PI 3.1415926535897932384626433832795;
@@ -93,29 +93,25 @@ vec3 recalcNormal(vec3 newPos) {
 
     float noiseFreq = 2.0;
     float noiseAmp = 0.4;
-    vec3 noisePos = vec3(pos.x * noiseFreq + uTime, pos.y, pos.z);
+    vec3 noisePos = vec3(pos.x * noiseFreq + uTime, pos.y+noiseFreq, pos.z);
   
-
-
-
     vec4 worldPos = modelMatrix * vec4( pos, 1.0 );
     vec4 mvPosition = viewMatrix * worldPos;
     gl_Position = projectionMatrix * mvPosition;
 
-
     vec3 transformedNormal = normalMatrix * normal;
-    vec3 normal = normalize( transformedNormal );
+    // vec3 normal = normalize( transformedNormal );
+    vec3 normal = v_normal;
     vUv = uv;
     vNormal = normal;
     vViewPos = -mvPosition.xyz;
     vWorldPos = worldPos.xyz;
 
-
-  
-
-
   }`,
-    glsl`uniform float uTransparent;
+  glsl`
+    
+  precision mediump float;
+  uniform float uTransparent;
   uniform vec2 winResolution;
   uniform float uRefractPower;
   uniform float uRefractNormal;
@@ -148,7 +144,6 @@ vec3 recalcNormal(vec3 newPos) {
   }
 
   vec3 hue( vec3 color, float hueAdjust ){
-
     const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);
     const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);
     const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);
@@ -164,12 +159,9 @@ vec3 recalcNormal(vec3 newPos) {
     float   chroma  = sqrt (I * I + Q * Q);
 
     hue += hueAdjust;
-
     Q = chroma * sin (hue);
     I = chroma * cos (hue);
-
     vec3    yIQ   = vec3 (YPrime, I, Q);
-
     return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );
 }
 
@@ -180,13 +172,14 @@ vec3 recalcNormal(vec3 newPos) {
     vec3 viewDirWorld;
     vec3 normal;
     vec3 normalWorld;
+    float uTime;
   };
 
   void main() {
     
 
     vec2 uv = gl_FragCoord.xy / winResolution.xy;
-    vec2 refractNormal = v_normal.xy * (1.0 - v_normal.z * uRefractNormal);
+    vec2 refractNormal = v_normal.xy * (1.0 - v_normal.z * uRefractNormal );
     vec3 refractCol = vec3( 0.0 );
 
     float slide;
@@ -207,7 +200,7 @@ vec3 recalcNormal(vec3 newPos) {
     #pragma unroll_loop_end
 
     refractCol /= float( 8 );
-    gl_FragColor = vec4(hue(refractCol * uIntensity, uHue), 1.0);
+    gl_FragColor = vec4(hue(refractCol * uIntensity, uHue ), 1.0);
     #include <tonemapping_fragment>
     #include <encodings_fragment>
   }`
