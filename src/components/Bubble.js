@@ -11,7 +11,7 @@ const Bubble = ({ setBg }) => {
 
     const { dark, color, environment, ...config } = useControls({
         uRefractPower: { value: 0.1, min: 0, max: 1 },
-        uTransparent: { value: 0.5, min: 0, max: 1 },
+        uTransparent: { value: 0.09, min: 0, max: 1 },
         uNoise: { value: 0.03, min: 0, max: 1, step: 0.01 },
         uHue: { value: 0.0, min: 0, max: Math.PI * 2, step: 0.01 },
         uSat: { value: 1.0, min: 1, max: 1.25, step: 0.01 },
@@ -61,7 +61,9 @@ const Bubble = ({ setBg }) => {
 
         const { clock } = state;
         sphere.current.material.uniforms.uTime.value = clock.getElapsedTime();
-
+        sphere.current.position.x = -4
+        sphere.current.position.y = 30
+        sphere.current.position.z = -4
         sphere.current.visible = false
         state.gl.setRenderTarget(fbo)
         state.gl.render(state.scene, state.camera)
@@ -112,7 +114,7 @@ const Bubble = ({ setBg }) => {
                     });
                 }}
             >
-                <sphereBufferGeometry args={[4, 164, 164]} />
+                <sphereBufferGeometry args={[15, 64, 64]} />
                 <MeshRefractionMaterial
                     uSceneTex={fbo.texture}
                     uRefractPower={1.0}

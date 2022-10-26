@@ -55,33 +55,32 @@ const MeshRefractionMaterialImpl = shaderMaterial(
   #pragma glslify: noise = require(glsl-noise/classic/3d.glsl) 
 
 
-vec3 displace(vec3 v) {
-  vec3 result = v;
-  float n = noise(result * 1.0 + uTime * 0.3);
-  result += normal * n * 0.15;
-  return result;
-}
+  vec3 orthogonal(vec3 v) {
+    return normalize(abs(v.x) > abs(v.z) ? vec3(-v.y, v.x, 0.0) : vec3(0.0, -v.z, v.y));
+  }
 
-vec3 orthogonal(vec3 v) {
-  return normalize(abs(v.x) > abs(v.z) ? vec3(-v.y, v.x, 0.0) : vec3(0.0, -v.z, v.y));
-}
+  vec3 displace(vec3 v) {
+    vec3 result = v;
+    float n = noise(result * 1.0 + uTime * 0.3);
+    result += normal * n * 0.15;
+    return result;
+  }
 
-vec3 recalcNormal(vec3 newPos) {
-  float offset = 0.001;
-  vec3 tangent = orthogonal(normal);
-  vec3 bitangent = normalize(cross(normal, tangent));
-  vec3 neighbour1 = position + tangent * offset;
-  vec3 neighbour2 = position + bitangent * offset;
+  vec3 recalcNormal(vec3 newPos) {
+    float offset = 0.001;
+    vec3 tangent = orthogonal(normal);
+    vec3 bitangent = normalize(cross(normal, tangent));
+    vec3 neighbour1 = position + tangent * offset;
+    vec3 neighbour2 = position + bitangent * offset;
 
-  vec3 displacedNeighbour1 = displace(neighbour1);
-  vec3 displacedNeighbour2 = displace(neighbour2);
+    vec3 displacedNeighbour1 = displace(neighbour1);
+    vec3 displacedNeighbour2 = displace(neighbour2);
 
-  vec3 displacedTangent = displacedNeighbour1 - newPos;
-  vec3 displacedBitangent = displacedNeighbour2 - newPos;
+    vec3 displacedTangent = displacedNeighbour1 - newPos;
+    vec3 displacedBitangent = displacedNeighbour2 - newPos;
 
-  return normalize(cross(displacedTangent, displacedBitangent));
-}
-
+    return normalize(cross(displacedTangent, displacedBitangent));
+  }
 
   void main() {
 
@@ -89,10 +88,6 @@ vec3 recalcNormal(vec3 newPos) {
     vec3 correctedNormal = recalcNormal(pos);
     v_normal = normalize(normalMatrix * correctedNormal);
     v_eye = normalize(modelViewMatrix * vec4( pos, 1.0 )).xyz;
-
-    // float noiseFreq = 2.0;
-    // float noiseAmp = 0.4;
-    // vec3 noisePos = vec3(pos.x + uTime, pos.y, pos.z);
   
     vec4 worldPos = modelMatrix * vec4( pos, 1.0 );
     vec4 mvPosition = viewMatrix * worldPos;
@@ -105,7 +100,6 @@ vec3 recalcNormal(vec3 newPos) {
     vNormal = normal;
     vViewPos = -mvPosition.xyz;
     vWorldPos = worldPos.xyz;
-
   }`,
   glsl`
     
