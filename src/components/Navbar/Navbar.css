@@ -19,7 +19,6 @@
     background-color: transparent;
     position: sticky;
     top: 0;
-    left: 0;
     z-index: 100;
     flex-wrap: wrap;
     scroll-behavior: smooth;

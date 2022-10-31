@@ -61,8 +61,8 @@ const MeshRefractionMaterialImpl = shaderMaterial(
 
   vec3 displace(vec3 v) {
     vec3 result = v;
-    float n = noise(result * 1.0 + uTime * 0.3);
-    result += normal * n * 0.15;
+    float n = noise(result * 3.0 + uTime * 0.8);
+    result += normal * n * 0.25;
     return result;
   }
 

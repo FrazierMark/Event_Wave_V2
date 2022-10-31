@@ -6,6 +6,7 @@ import {
   Environment,
   PerspectiveCamera,
   ContactShadows,
+  Text,
 } from "@react-three/drei";
 import { Effects } from "../Effects";
 import { a } from "@react-spring/three";
@@ -19,20 +20,19 @@ const Scene = ({ setBg }) => {
   return (
     <>
       <Light />
-      <OrbitControls dampingFactor={0.5} enableDamping="true" />
       <Stars
         radius={100}
         depth={50}
         count={5000}
         factor={4}
-        saturation={0}
-        fade
+        saturation={1}
         speed={1}
       />
 
       <PerspectiveCamera
         makeDefault
-        position={[0, 0, 15]}
+        position={[0, 0, 25]}
+        enableZoom="false"
         fov={75}
       ></PerspectiveCamera>
       <Suspense fallback={null}>
@@ -40,6 +40,18 @@ const Scene = ({ setBg }) => {
         {/* <TvModel /> */}
 
         <Bubble setBg={setBg} />
+
+        <Text
+          position={[0, 0, -0.2]}
+          fontSize={6.6}
+          color="yellow"
+          font={"EspinosaNovaPro-RotundaBold.otf"}
+          characters="abcdefghijklmnopqrstuvwxyz0123456789!"
+          material-fog={false}
+          letterSpacing={0}
+        >
+          Event Wave
+        </Text>
 
         <Environment preset="lobby" />
         <ContactShadows

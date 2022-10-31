@@ -50,13 +50,7 @@ const Bubble = ({ setBg }) => {
     }, [GPU]);
 
     // Change cursor on hovered state
-    useEffect(() => {
-        document.body.style.cursor = hovered
-            ? "none"
-            : `url('data:image/svg+xml;base64,${btoa(
-                '<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="10" fill="#E8B059"/></svg>'
-            )}'), auto`;
-    }, [hovered]);
+
 
     // Make the bubble float and follow the mouse
     // This is frame-based animation, useFrame subscribes the component to the render-loop
@@ -74,9 +68,9 @@ const Bubble = ({ setBg }) => {
         state.gl.setRenderTarget(null)
         sphere.current.visible = true
 
+        // Move camera on mouse move
         rEuler.set((mouse.y * viewport.height) / 100, (mouse.x * viewport.width) / 100, 0)
         sphere.current.quaternion.slerp(rQuaternion.setFromEuler(rEuler), 0.1)
-
 
         // Make sphere hover slightly up and down
         if (sphere.current) {
@@ -116,8 +110,8 @@ const Bubble = ({ setBg }) => {
                     // Toggle mode between dark and bright
                     setMode(!mode);
                     setBg({
-                        background: !mode ? "#202020" : "#f0f0f0",
-                        fill: !mode ? "#f0f0f0" : "#202020",
+                        background: !mode ? "#202020" : "#e8e8e8",
+                        fill: !mode ? "#e8e8e8" : "#202020",
                     });
                 }}
             >
