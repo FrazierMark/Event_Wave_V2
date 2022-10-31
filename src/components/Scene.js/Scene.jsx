@@ -37,7 +37,7 @@ const Scene = ({ setBg }) => {
       ></PerspectiveCamera>
       <Suspense fallback={null}>
         <Effects />
-        <TvModel />
+        {/* <TvModel /> */}
 
         <Bubble setBg={setBg} />
 

@@ -14,11 +14,12 @@
   }
 
   .nav {
-    height: 60px;
+    /* height: 60px; */
     display: flex;
-    background-color: rgba(255, 255, 255, 0);
+    background-color: transparent;
     position: sticky;
     top: 0;
+    left: 0;
     z-index: 100;
     flex-wrap: wrap;
     scroll-behavior: smooth;
@@ -38,7 +39,7 @@
     font-weight: 800;
   }
   .title {
-    font-size: 5em;
+    font-size: 2em;
     color: rgb(129, 129, 129);
     font-family: RotundaBold;
   }
@@ -75,7 +76,8 @@
   
   .nav__nav {
     display: flex;
-    height: 90%;
+    /* height: 90%; */
+    background-color: transparent;
     align-items: center;
     text-align: right;
     justify-content: space-between;

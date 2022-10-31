@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js";
-import { useFBO, useDetectGPU } from "@react-three/drei";
+import { useFBO, useDetectGPU, useScroll } from "@react-three/drei";
 import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useSpring } from "@react-spring/core";
 import { a } from "@react-spring/three";
 import { useControls } from "leva";
 
 const Bubble = ({ setBg }) => {
+
+    const { size, viewport } = useThree()
+    const [rEuler, rQuaternion] = useMemo(() => [new THREE.Euler(), new THREE.Quaternion()], [])
 
     const { dark, color, environment, ...config } = useControls({
         uRefractPower: { value: 0.1, min: 0, max: 1 },
@@ -59,17 +62,21 @@ const Bubble = ({ setBg }) => {
     // This is frame-based animation, useFrame subscribes the component to the render-loop
     useFrame((state) => {
 
-        const { clock } = state;
+        const { clock, mouse } = state;
         sphere.current.material.uniforms.uTime.value = clock.getElapsedTime();
-        sphere.current.position.x = -4
-        sphere.current.position.y = 30
-        sphere.current.position.z = -4
+        sphere.current.position.x = 0
+        sphere.current.position.y = 0
+        sphere.current.position.z = 0
         sphere.current.visible = false
         state.gl.setRenderTarget(fbo)
         state.gl.render(state.scene, state.camera)
         state.scene.background = null
         state.gl.setRenderTarget(null)
         sphere.current.visible = true
+
+        rEuler.set((mouse.y * viewport.height) / 100, (mouse.x * viewport.width) / 100, 0)
+        sphere.current.quaternion.slerp(rQuaternion.setFromEuler(rEuler), 0.1)
+
 
         // Make sphere hover slightly up and down
         if (sphere.current) {
@@ -100,7 +107,7 @@ const Bubble = ({ setBg }) => {
         <>
             <a.mesh
                 ref={sphere}
-                // scale={wobble}
+                scale={wobble}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
                 onPointerDown={() => setDown(true)}

@@ -14,7 +14,7 @@ const LandingPage = ({ user, handleLogout }) => {
   );
 
   return (
-    <>
+    
       <a.main style={{ background }}>
         <Navbar user={user} handleLogout={handleLogout} />
         <Canvas className="canvas" dpr={[1, 2]}>
@@ -27,7 +27,7 @@ const LandingPage = ({ user, handleLogout }) => {
           />
         </Canvas>
       </a.main>
-    </>
+    
   );
 };
 
