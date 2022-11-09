@@ -126,7 +126,7 @@ const Bubble = ({ setBg }) => {
                     uResolution={[resolution, resolution]}
                     uTime={10.0}
                     {...config}
-                    // wireframe={true}
+                    //wireframe={true}
                 />
             </a.mesh>
 

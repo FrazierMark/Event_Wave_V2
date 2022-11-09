@@ -5,9 +5,10 @@ import { extend, useThree } from '@react-three/fiber'
 import { shaderMaterial } from '@react-three/drei'
 
 
-// Inspired from pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
-// Inspired from John Beresford - https://www.lab.john-beresford.com/experiments/chaossphere
+// Mostly from ->>> @0xca0a (twitter) pmdn.rs - https://codesandbox.io/s/relaxed-edison-46jpyh
 // Inspired from nemutas -  ha-labo-effect - https://github.com/nemutas/ha-labo-effect
+// Inspired from John Beresford - https://www.lab.john-beresford.com/experiments/chaossphere
+
 
 const MeshRefractionMaterialImpl = shaderMaterial(
   {
@@ -169,8 +170,7 @@ const MeshRefractionMaterialImpl = shaderMaterial(
   };
 
   void main() {
-    
-
+  
     vec2 uv = gl_FragCoord.xy / winResolution.xy;
     vec2 refractNormal = v_normal.xy * (1.0 - v_normal.z * uRefractNormal );
     vec3 refractCol = vec3( 0.0 );
