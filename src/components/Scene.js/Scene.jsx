@@ -8,6 +8,7 @@ import {
   ContactShadows,
   Text,
 } from "@react-three/drei";
+import { Perf } from "r3f-perf";
 import { Effects } from "../Effects";
 import { a } from "@react-spring/three";
 import Light from "../Light";
@@ -19,6 +20,7 @@ const Scene = ({ setBg }) => {
 
   return (
     <>
+      <Perf position="top-left" />
       <Light />
       <Stars
         radius={100}
