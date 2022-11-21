@@ -7,16 +7,41 @@ function Effects() {
       glitch,
       bloom,
       noise,
-      chromaticAberration,
-      depthOfField
+      chromaticAberration
     } = useControls({
       args: [1, 1, 1],
       glitch: false,
       bloom: false,
       noise: false,
       chromaticAberration: false,
-      depthOfField: { target: [0, 0, 10], focalLength: 0.8, height: 700 }
     });
+
+  const { target, focalLength, height, bokehScale } = useControls('dof', {
+    target: {
+      value: 10,
+      step: 10.0,
+      min: 0,
+      max: 1000
+    },
+    focalLength: {
+      value: 0.8,
+      step: 0.01,
+      min: 0,
+      max: 10
+    },
+    bokehScale: {
+      value: 8,
+      step: 0.2,
+      min: 0,
+      max: 20
+    },
+    height: {
+      value: 700,
+      step: 10,
+      min: 0,
+      max: 1000
+    },
+  })
 
     return (
       <EffectComposer>
@@ -38,9 +63,9 @@ function Effects() {
         {chromaticAberration && (
           <ChromaticAberration offset={[0.02 * args[0], 0.002 * args[1]]} />
         )}
-        {depthOfField && (
-          <DepthOfField target={[0, 0, 10]} focalLength={0.8} bokehScale={8} height={700} />
-        )}
+
+        <DepthOfField target={[0, 0, target]} focalLength={focalLength} bokehScale={bokehScale} height={height} />
+
       </EffectComposer>
     );
   }

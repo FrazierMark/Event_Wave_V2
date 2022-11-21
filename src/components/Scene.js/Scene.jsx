@@ -23,9 +23,9 @@ const Scene = ({ setBg }) => {
       <Perf position="top-left" />
       <Light />
       <Stars
-        radius={100}
+        radius={50}
         depth={50}
-        count={5000}
+        count={3000}
         factor={4}
         saturation={1}
         speed={1}
@@ -55,7 +55,7 @@ const Scene = ({ setBg }) => {
           Event Wave
         </Text>
 
-        <Environment preset="lobby" />
+        {/* <Environment preset="lobby" /> */}
         <ContactShadows
           rotation={[Math.PI / 2, 0, 0]}
           position={[0, -1.6, 0]}
@@ -66,7 +66,6 @@ const Scene = ({ setBg }) => {
           far={1.6}
         />
       </Suspense>
-      {/* </Canvas> */}
     </>
   );
 };
