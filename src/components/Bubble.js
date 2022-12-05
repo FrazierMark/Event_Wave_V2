@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js";
+import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js"
 import { useFBO, useDetectGPU, useScroll } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
@@ -128,6 +128,7 @@ const Bubble = ({ setBg }) => {
                     {...config}
                     //wireframe={true}
                 />
+
             </a.mesh>
 
         </>

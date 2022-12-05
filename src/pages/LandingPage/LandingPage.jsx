@@ -27,6 +27,7 @@ const LandingPage = ({ user, handleLogout }) => {
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
         />
+        <OrbitControls />
       </Canvas>
     </a.main>
   );
