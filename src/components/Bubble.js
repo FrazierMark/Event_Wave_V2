@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, forwardRef } from "react";
 import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js"
 import { useFBO, useDetectGPU, useScroll } from "@react-three/drei";
 import * as THREE from "three";
@@ -126,13 +126,11 @@ const Bubble = ({ setBg }) => {
                     uResolution={[resolution, resolution]}
                     uTime={10.0}
                     {...config}
-                    //wireframe={true}
+                //wireframe={true}
                 />
-
             </a.mesh>
-
         </>
     );
-};
+}
 
 export default Bubble;

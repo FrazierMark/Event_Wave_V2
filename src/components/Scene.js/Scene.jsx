@@ -38,7 +38,7 @@ const Scene = ({ setBg }) => {
         fov={75}
       ></PerspectiveCamera>
       <Suspense fallback={null}>
-        <Effects />
+        <Effects setBg={setBg} />
         {/* <TvModel /> */}
 
         <Bubble setBg={setBg} />

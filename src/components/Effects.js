@@ -1,7 +1,15 @@
-import { ChromaticAberration, Bloom, Glitch, EffectComposer, Noise, DepthOfField } from "@react-three/postprocessing";
+import { ChromaticAberration, Bloom, Glitch, EffectComposer, Noise, DepthOfField, GodRays } from "@react-three/postprocessing";
 import { useControls } from "leva";
+import { BlendFunction, GlitchMode } from 'postprocessing';
+import Bubble from "./Bubble";
+import { useState } from "react";
+import Sun from "./Sun";
 
-function Effects() {
+
+function Effects({ setBg }) {
+
+  const [sunRef, setSunRef] = useState();
+
     const {
       args,
       glitch,
@@ -43,8 +51,50 @@ function Effects() {
     },
   })
 
-    return (
+
+  const { exposure, decay, blur } = useControls('PostProcessing - GodRays', {
+    exposure: {
+      value: 0.34,
+      min: 0,
+      max: 1,
+    },
+    decay: {
+      value: 0.9,
+      min: 0,
+      max: 1,
+      step: 0.1,
+    },
+    blur: {
+      value: false,
+    },
+  })
+
+
+  return (
+    <>
+      <Sun ref={setSunRef} />
+
+      {sunRef && (
       <EffectComposer>
+
+          <GodRays
+            sun={sunRef}
+            exposure={exposure}
+            decay={decay}
+            blur={blur}
+            blendFunction={BlendFunction.Screen} // The blend function of this effect.
+            samples={64} // The number of samples per pixel.
+            density={0.97} // The density of the light rays.
+            // decay={0.9} // An illumination decay factor.
+            weight={0.86} // A light ray weight factor.
+            // exposure={0.2} // A constant attenuation coefficient.
+            clampMax={1} // An upper bound for the saturation of the overall effect.
+          // width={Resizer.AUTO_SIZE} // Render width.
+          // height={Resizer.AUTO_SIZE} // Render height.
+          // kernelSize={KernelSize.SMALL} // The blur kernel size. Has no effect if blur is disabled.
+          // blur={true} // Whether the god rays should be blurred to reduce artifacts.
+          />
+
         {glitch && (
           <Glitch
             delay={[args[0] * 0.5, args[0] * 1.5]}
@@ -67,6 +117,10 @@ function Effects() {
         <DepthOfField target={[0, 0, target]} focalLength={focalLength} bokehScale={bokehScale} height={height} />
 
       </EffectComposer>
+
+      )}
+
+    </>
     );
   }
   
