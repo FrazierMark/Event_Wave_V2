@@ -10,7 +10,6 @@ import {
 } from "@react-three/drei";
 import { Perf } from "r3f-perf";
 import { Effects } from "../Effects";
-import { a } from "@react-spring/three";
 import Light from "../Light";
 import TvModel from "../TV";
 import Bubble from "../Bubble.js";
