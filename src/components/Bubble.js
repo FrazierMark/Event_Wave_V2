@@ -6,14 +6,12 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useSpring } from "@react-spring/core";
 import { a } from "@react-spring/three";
 import { useControls } from "leva";
-import { LayerMaterial, Displace } from "lamina";
 
 const Bubble = ({ setBg }) => {
 
     const { size, viewport } = useThree()
     const [rEuler, rQuaternion] = useMemo(() => [new THREE.Euler(), new THREE.Quaternion()], [])
     const bubbleRef = useRef(null)
-    const displaceRef = useRef(null)
 
     const { dark, color, environment, ...config } = useControls({
         uRefractPower: { value: 0.1, min: 0, max: 1 },
@@ -70,8 +68,6 @@ const Bubble = ({ setBg }) => {
         state.scene.background = null
         state.gl.setRenderTarget(null)
         sphere.current.visible = true
-
-        displaceRef.current.offset.x += 4
 
         // Move camera on mouse move
         rEuler.set((mouse.y * viewport.height) / 100, (mouse.x * viewport.width) / 100, 0)
@@ -133,7 +129,6 @@ const Bubble = ({ setBg }) => {
                     {...config}
                 //wireframe={true}
                 />
-                <Displace ref={displaceRef} strength={3} scale={0.25} />
             </a.mesh>
         </>
     );
