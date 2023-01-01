@@ -15,13 +15,15 @@ function Effects({ setBg }) {
       glitch,
       bloom,
       noise,
-      chromaticAberration
+      chromaticAberration,
+      godrays
     } = useControls({
       args: [1, 1, 1],
       glitch: false,
       bloom: false,
       noise: false,
       chromaticAberration: false,
+      godrays: false,
     });
 
   const { target, focalLength, height, bokehScale } = useControls('dof', {
@@ -77,7 +79,7 @@ function Effects({ setBg }) {
       {sunRef && (
       <EffectComposer>
 
-          <GodRays
+          {godrays && (<GodRays
             sun={sunRef}
             exposure={exposure}
             decay={decay}
@@ -94,6 +96,7 @@ function Effects({ setBg }) {
           // kernelSize={KernelSize.SMALL} // The blur kernel size. Has no effect if blur is disabled.
           // blur={true} // Whether the god rays should be blurred to reduce artifacts.
           />
+          )}
 
         {glitch && (
           <Glitch
