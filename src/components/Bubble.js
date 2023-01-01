@@ -6,7 +6,6 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { useSpring } from "@react-spring/core";
 import { a } from "@react-spring/three";
 import { useControls } from "leva";
-import { LayerMaterial, Displace } from "lamina";
 
 const Bubble = ({ setBg }) => {
 
