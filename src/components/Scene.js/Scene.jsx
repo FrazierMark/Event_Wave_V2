@@ -19,7 +19,7 @@ const Scene = ({ setBg }) => {
 
   return (
     <>
-      <Perf position="top-left" />
+      <Perf position="bottom-left" />
       <Light />
       <Stars
         radius={50}

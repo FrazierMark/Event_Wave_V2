@@ -18,7 +18,7 @@ const LandingPage = ({ user, handleLogout }) => {
 
   return (
     <a.main style={{ background }}>
-      {/* <Navbar user={user} handleLogout={handleLogout} /> */}
+      <Navbar user={user} handleLogout={handleLogout} />
       <Canvas className="canvas" dpr={[1, 2]}>
         <Scene setBg={set} />
         <OrbitControls
