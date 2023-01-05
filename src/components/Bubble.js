@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo, forwardRef } from "react";
 import { MeshRefractionMaterial } from "../shaders/MeshRefractionMaterial.js"
-import { useFBO, useDetectGPU, useScroll } from "@react-three/drei";
+import { useFBO, useDetectGPU, useScroll, MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useSpring } from "@react-spring/core";
@@ -129,6 +129,7 @@ const Bubble = ({ setBg }) => {
                     {...config}
                 //wireframe={true}
                 />
+                {/* <MeshTransmissionMaterial /> */}
             </a.mesh>
         </>
     );
